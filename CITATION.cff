@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "Cite this software separately from the source manuscript; use the manuscript's public bibliographic record when available."
+title: "Pandora: a reference implementation of personalized federated contracts for Open RAN"
+type: software
+authors:
+  - name: "Pandora contributors"
+version: 0.1.0
+date-released: 2026-09-21
+url: "https://github.com/wsshinskku/Pandora"
+repository-code: "https://github.com/wsshinskku/Pandora"
+license: MIT
+keywords:
+  - Open RAN
+  - federated learning
+  - xApp coordination
+  - contract learning
+  - action projection

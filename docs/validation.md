@@ -1,0 +1,53 @@
+# Validation record
+
+Local validation uses Python 3.12 on Windows 11, CPU PyTorch. Exact package versions are saved in `requirements-tested.txt` and the checked-in [smoke manifest](assets/smoke-manifest.json). These checks verify the software artifact; they do not reproduce the paper's RAN measurements.
+
+## Automated checks
+
+- Numerical weighted projection with a closed-form optimum.
+- OSQP solutions compared against an independent SciPy SLSQP constrained optimizer.
+- Projection identity, resource budgets, steering simplexes and full coupled feasibility.
+- Nonempty fallback containing neutral, including a singleton fallback.
+- Interior contract sampling and nested shrink feasibility.
+- Exactly 128 valid candidates and both accepted-contract and high-risk rejection paths.
+- Verification rejection across all four checks and three allowed shrinks.
+- Leave-one-out support calibration and residual upper-risk clipping.
+- Sample-weighted FedAvg and preservation of private site adapters.
+- Rejection of calibration/test data in training and duplicate episode IDs.
+- Applied-action supervision, checkpoint serialization and NPZ round trip.
+- Paired exogenous traces, tail direction, bootstrap pairing and single-class AUROC handling.
+- Missing/duplicate channel traces and invalid configuration rejection.
+- JSON scientific-notation configuration reload and small QP residuals in adaptive bounds.
+- Complete paired-seed experiment plus external acknowledgement/retry protocol.
+
+The current suite contains 21 passing tests. `ruff check` and `ruff format --check` pass. Both a source archive and a wheel build successfully.
+
+## Executed scenarios
+
+```bash
+pandora run --config configs/smoke.yaml --output runs/smoke-final --methods independent static adaptive scheduler-reference qos-reference pandora
+pandora ablate --config configs/smoke.yaml --output runs/ablation
+pandora sweep --config configs/smoke.yaml --output runs/sweep-verified --values 0.5 1.0 1.5 --seeds 0 1
+python examples/external_loop.py --run runs/smoke --output runs/external-audit.jsonl
+pandora train --config configs/smoke.yaml --data runs/smoke/seed-0 --output runs/offline-training
+```
+
+The external-process example records 90 acknowledged transitions, including the final slot. The sweep executes six paired seed/aggressiveness combinations and writes seed-level intervals. All four Pandora ablations execute.
+
+## Observed small-run behavior
+
+The checked smoke configuration uses two sites, six UEs/site, 90 slots, four training episodes and seed 0. Its results include:
+
+| Method | Mean site throughput (Mbps) | Mean delay (ms) | Exceedance probability | Fallback ratio |
+|---|---:|---:|---:|---:|
+| Independent | 10.8186 | 5.0168 | 0.0556 | N/A |
+| Adaptive | 10.8186 | 5.0080 | 0.0556 | N/A |
+| Pandora | 10.8186 | 5.0000 | 0.0556 | 1.0000 |
+
+The small load leaves throughput largely arrival-limited. With this limited calibration/training sample, Pandora uses fallback for all slots. These figures demonstrate execution and conservative fallback behavior, not the paper's claimed improvements. A dedicated numerical test separately exercises successful learned-contract synthesis and verification; it does not substitute for empirical learned-contract performance on real RAN data.
+
+The [figure](assets/smoke-performance.png), [flat metrics](assets/smoke-summary.csv) and [resolved configuration](assets/smoke-config.json) come from the actual run. Only generated summaries and the figure are checked in; raw local episodes and model checkpoints stay under the ignored `runs/` directory.
+
+## Validation boundaries
+
+Docker was not available in the local validation environment, so its build has not been locally executed. The Dockerfile packages the same tested Python entry point. GitHub Actions separately tests Linux and Windows after publication; inspect its live status badge for that result. The ns-O-RAN/QuaDRiGa integration boundary is documented and the subprocess protocol is tested, but no actual E2/NS-3/QuaDRiGa end-to-end deployment is claimed.

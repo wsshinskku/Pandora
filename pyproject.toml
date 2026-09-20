@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pandora-oran"
+version = "0.1.0"
+description = "Personalized federated contracts for black-box Open RAN xApps"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = ["numpy>=1.26,<3", "scipy>=1.11,<2", "osqp>=1.0,<2", "torch>=2.2,<3", "PyYAML>=6,<7", "matplotlib>=3.8,<4"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "ruff>=0.9,<1", "build>=1,<2"]
+
+[project.scripts]
+pandora = "pandora.cli:main"
+
+[project.urls]
+Repository = "https://github.com/wsshinskku/Pandora"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]

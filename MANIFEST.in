@@ -1,0 +1,5 @@
+include README.md README.ko.md LICENSE CITATION.cff CONTRIBUTING.md requirements-tested.txt
+recursive-include configs *.yaml
+recursive-include docs *.md *.png *.json *.csv
+recursive-include examples *.py
+recursive-include tests *.py

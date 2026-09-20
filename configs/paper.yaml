@@ -1,0 +1,46 @@
+# Paper-scale algorithm configuration. Backend remains the analytical sandbox.
+# Running this file DOES NOT reproduce the ns-3 measurements in the manuscript.
+simulation:
+  sites: 4
+  users: 20
+  cells: 2
+  slots: 3600
+  train_episodes: 4
+  slot_seconds: 1.0
+  profiles: [embb, latency, mixed, bursty]
+  aggressiveness: 1.0
+  # Reference choices below: actual values are absent from the supplied paper.
+  bandwidth_mhz: 20.0
+  buffer_mbit: 5.0
+  min_rate_mbps: [1.0, 0.15, 0.02]
+  max_delay_ms: [150.0, 50.0, 500.0]
+contract:
+  period: 30
+  epsilon: 0.10
+  kappa: 0.10
+  delta_cal: 0.05
+  support_quantile: 0.95
+  lower_quantile: 0.10
+  upper_quantile: 0.90
+  coupling_quantile: 0.90
+  minimum_safe: 24
+  verification_samples: 64
+  shrink_factor: 0.20
+  max_shrinks: 3
+  perturbation_std: 0.05
+  weights: [1.0, 1.5, 2.0]
+  solver_tolerance: 0.00001
+learning:
+  fl_period: 600
+  epochs: 3
+  batch_size: 256
+  learning_rate: 0.001
+  risk_weight: 1.0
+  adapter_penalty: 0.0001
+  personalize: true
+  federate: true
+  calibrate: true
+  coupling: true
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+bootstrap_samples: 10000
+threads: 1

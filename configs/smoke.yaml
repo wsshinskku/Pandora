@@ -1,0 +1,16 @@
+# Small CPU integration run. Uses the paper's 128 candidates and calibration thresholds.
+simulation:
+  sites: 2
+  users: 6
+  cells: 2
+  slots: 90
+  train_episodes: 4
+contract:
+  period: 30
+learning:
+  fl_period: 90
+  epochs: 3
+  batch_size: 64
+seeds: [0]
+bootstrap_samples: 1000
+threads: 1
