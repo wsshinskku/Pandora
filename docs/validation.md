@@ -34,6 +34,28 @@ pandora train --config configs/smoke.yaml --data runs/smoke/seed-0 --output runs
 
 The external-process example records 90 acknowledged transitions, including the final slot. The sweep executes six paired seed/aggressiveness combinations and writes seed-level intervals. All four Pandora ablations execute.
 
+The manuscript-scale sandbox configuration also completes for seed 0:
+
+```bash
+pandora run --config configs/paper.yaml --output runs/paper-one-seed --seeds 0
+```
+
+This runs four sites with 20 UEs and two cells each, four 3600-slot training episodes, one calibration episode and one test episode per site. All 24 federated rounds finish. Independent, adaptive and Pandora evaluations each execute 14,400 test control slots across the sites. The [summary](assets/paper-scale-one-seed-summary.csv), [configuration](assets/paper-scale-one-seed-config.json) and [manifest](assets/paper-scale-one-seed-manifest.json) record the actual run.
+
+At this scale the seed-0 mean throughputs are 41.2325 Mbps (independent), 41.1206 Mbps (adaptive) and 41.2129 Mbps (Pandora). Pandora again uses fallback for every slot; these results do not demonstrate learned-contract activation or the paper's performance gains. A single seed does not provide a seed-level confidence interval.
+
+## GitHub Actions
+
+[Validation run 35524349260](https://github.com/wsshinskku/Pandora/actions/runs/35524349260) passes all three environments for implementation commit `f0332dc`:
+
+| Environment | Result |
+|---|---|
+| Ubuntu, Python 3.11 | Passed |
+| Ubuntu, Python 3.12 | Passed |
+| Windows, Python 3.12 | Passed |
+
+Each job checks lint/formatting, runs the test suite, executes the small experiment and external-process example, builds the package, and uploads its generated smoke summary. Subsequent documentation-only changes record these results without modifying the implementation.
+
 ## Observed small-run behavior
 
 The checked smoke configuration uses two sites, six UEs/site, 90 slots, four training episodes and seed 0. Its results include:
@@ -50,4 +72,4 @@ The [figure](assets/smoke-performance.png), [flat metrics](assets/smoke-summary.
 
 ## Validation boundaries
 
-Docker was not available in the local validation environment, so its build has not been locally executed. The Dockerfile packages the same tested Python entry point. GitHub Actions separately tests Linux and Windows after publication; inspect its live status badge for that result. The ns-O-RAN/QuaDRiGa integration boundary is documented and the subprocess protocol is tested, but no actual E2/NS-3/QuaDRiGa end-to-end deployment is claimed.
+Docker was not available in the local validation environment, so its build has not been locally executed. The Dockerfile packages the same tested Python entry point. GitHub Actions tests Linux and Windows as recorded above. The ns-O-RAN/QuaDRiGa integration boundary is documented and the subprocess protocol is tested, but no actual E2/NS-3/QuaDRiGa end-to-end deployment is claimed.
