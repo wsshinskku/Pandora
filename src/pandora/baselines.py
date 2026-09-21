@@ -1,4 +1,4 @@
-"""Executable reference comparators. No claim of reproducing third-party baseline papers."""
+"""Executable xApp coordination comparison methods."""
 
 import numpy as np
 

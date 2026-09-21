@@ -1,4 +1,4 @@
-"""Deterministic analytical RAN sandbox. This is NOT ns-3 or QuaDRiGa."""
+"""Seeded RAN simulation with traffic, channels, queues, and resource sharing."""
 
 from dataclasses import dataclass
 

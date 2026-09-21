@@ -1,4 +1,4 @@
-"""Three reference black-box policies. Pandora only consumes their joint proposals."""
+"""Three independent black-box policies. Pandora only consumes their joint proposals."""
 
 import numpy as np
 

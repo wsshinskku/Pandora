@@ -1,4 +1,4 @@
-"""Exercise the real JSONL subprocess protocol with the local sandbox acting as a RAN.
+"""Exercise the real JSONL subprocess protocol with the local simulation acting as a RAN.
 
 Usage: python examples/external_loop.py --run runs/smoke --output runs/external-audit.jsonl
 """

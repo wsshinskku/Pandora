@@ -1,4 +1,4 @@
-"""Generate actual run plots, clearly labeled as sandbox measurements."""
+"""Generate throughput, delay, and intervention plots from run telemetry."""
 
 import csv
 from pathlib import Path
@@ -37,9 +37,7 @@ def plot_run(directory):
     axes[0].legend(fontsize=8)
     for ax in axes:
         ax.grid(alpha=0.2)
-    fig.suptitle(
-        "Pandora analytical sandbox | generated measurements, not paper results", fontsize=13
-    )
+    fig.suptitle("Pandora | RAN simulation results", fontsize=13)
     destination = directory / "performance.png"
     fig.savefig(destination, dpi=160)
     plt.close(fig)

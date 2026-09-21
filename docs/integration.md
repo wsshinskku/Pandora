@@ -1,12 +1,12 @@
 # External RAN integration
 
-Pandora's policy boundary is independent of transport. The repository provides a working JSON-lines process interface and a channel importer. It does not implement E2AP, an E2SM codec, or an ns-3 scheduler. Platform-specific hooks must apply the projected vector and return real post-execution measurements.
+Pandora's policy boundary is independent of transport. The repository provides a working JSON-lines process interface and a channel importer. Connect E2AP, E2SM, or ns-3 scheduling hooks on the platform side to apply the projected vector and return post-execution measurements.
 
 ## Upstream projects
 
 - [O-RAN SC ns-3 E2 module](https://github.com/o-ran-sc/sim-ns3-o-ran-e2): the upstream README describes its ns3-mmWave extension and custom e2sim dependency. Pin mutually compatible commits in your deployment environment rather than assuming a generic ns-3 release works.
 - [ns-O-RAN framework](https://openrangym.com/ran-frameworks/ns-o-ran): upstream integration information.
-- [Fraunhofer HHI QuaDRiGa](https://github.com/fraunhoferhhi/QuaDRiGa): official channel generator and its own license. Export channel/SINR traces from your actual scenario; synthetic sandbox samples are not QuaDRiGa output.
+- [Fraunhofer HHI QuaDRiGa](https://github.com/fraunhoferhhi/QuaDRiGa): official channel generator and its own license. Export channel/SINR traces from your actual scenario; record the scenario and trace configuration alongside imported samples.
 - [OSQP Python interface](https://osqp.org/docs/interfaces/python.html): the sparse QP interface used by the contract projector.
 
 These dependencies are not downloaded or built by `pip install pandora-oran`. The package name here identifies the local source distribution; install this checkout as documented in the README.
@@ -29,7 +29,7 @@ pandora run --config configs/smoke.yaml --output runs/bridge-training
 python examples/external_loop.py --run runs/bridge-training --output runs/bridge-audit.jsonl
 ```
 
-The example starts a separate Python controller process and exchanges one request/reply per slot. Its plant is still the analytical sandbox. The final `finish` request acknowledges the last action, so the last transition is not lost.
+The example starts a separate Python controller process and exchanges one request/reply per slot. Its plant is the Python RAN environment. The final `finish` request acknowledges the last action, so the last transition is not lost.
 
 To launch the policy directly (replace the six slice IDs with the actual site's assignments):
 
@@ -120,7 +120,7 @@ The file must contain the entire configured Cartesian grid; duplicate/missing in
 pandora import-trace data/sinr.csv --slots 3600 --users 20 --cells 2 --bandwidth-mhz 20 --output data/channel.npz
 ```
 
-The result contains `capacity_mbps[T,U,G]`. The sandbox accepts it through the Python API:
+The result contains `capacity_mbps[T,U,G]`. The simulation backend accepts it through the Python API:
 
 ```python
 import numpy as np

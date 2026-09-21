@@ -86,7 +86,7 @@ class ActionSpace:
         )
 
     def coupling_template(self, slices):
-        """Reference operator template; exact H and b were not specified in the PDF."""
+        """Operator coupling template for resource, steering, and QoS constraints."""
         rows, limits = [], []
         n, g = self.users, self.cells
         for u in range(n):

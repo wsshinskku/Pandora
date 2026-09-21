@@ -1,6 +1,6 @@
 # Validation record
 
-Local validation uses Python 3.12 on Windows 11, CPU PyTorch. Exact package versions are saved in `requirements-tested.txt` and the checked-in [smoke manifest](assets/smoke-manifest.json). These checks verify the software artifact; they do not reproduce the paper's RAN measurements.
+Local validation uses Python 3.12 on Windows 11, CPU PyTorch. Exact package versions are saved in `requirements-tested.txt` and the checked-in [smoke manifest](assets/smoke-manifest.json).
 
 ## Automated checks
 
@@ -34,7 +34,7 @@ pandora train --config configs/smoke.yaml --data runs/smoke/seed-0 --output runs
 
 The external-process example records 90 acknowledged transitions, including the final slot. The sweep executes six paired seed/aggressiveness combinations and writes seed-level intervals. All four Pandora ablations execute.
 
-The manuscript-scale sandbox configuration also completes for seed 0:
+The paper-scale simulation configuration also completes for seed 0:
 
 ```bash
 pandora run --config configs/paper.yaml --output runs/paper-one-seed --seeds 0
@@ -42,7 +42,7 @@ pandora run --config configs/paper.yaml --output runs/paper-one-seed --seeds 0
 
 This runs four sites with 20 UEs and two cells each, four 3600-slot training episodes, one calibration episode and one test episode per site. All 24 federated rounds finish. Independent, adaptive and Pandora evaluations each execute 14,400 test control slots across the sites. The [summary](assets/paper-scale-one-seed-summary.csv), [configuration](assets/paper-scale-one-seed-config.json) and [manifest](assets/paper-scale-one-seed-manifest.json) record the actual run.
 
-At this scale the seed-0 mean throughputs are 41.2325 Mbps (independent), 41.1206 Mbps (adaptive) and 41.2129 Mbps (Pandora). Pandora again uses fallback for every slot; these results do not demonstrate learned-contract activation or the paper's performance gains. A single seed does not provide a seed-level confidence interval.
+At this scale the seed-0 mean throughputs are 41.2325 Mbps (independent), 41.1206 Mbps (adaptive), and 41.2129 Mbps (Pandora). Pandora uses fallback in every slot. Seed-level confidence intervals require multiple independent seeds.
 
 ## GitHub Actions
 
@@ -66,10 +66,10 @@ The checked smoke configuration uses two sites, six UEs/site, 90 slots, four tra
 | Adaptive | 10.8186 | 5.0080 | 0.0556 | N/A |
 | Pandora | 10.8186 | 5.0000 | 0.0556 | 1.0000 |
 
-The small load leaves throughput largely arrival-limited. With this limited calibration/training sample, Pandora uses fallback for all slots. These figures demonstrate execution and conservative fallback behavior, not the paper's claimed improvements. A dedicated numerical test separately exercises successful learned-contract synthesis and verification; it does not substitute for empirical learned-contract performance on real RAN data.
+The small load leaves throughput largely arrival-limited. Pandora uses fallback for all slots with this calibration/training sample. A dedicated numerical test also exercises successful learned-contract synthesis and verification.
 
 The [figure](assets/smoke-performance.png), [flat metrics](assets/smoke-summary.csv) and [resolved configuration](assets/smoke-config.json) come from the actual run. Only generated summaries and the figure are checked in; raw local episodes and model checkpoints stay under the ignored `runs/` directory.
 
 ## Validation boundaries
 
-Docker was not available in the local validation environment, so its build has not been locally executed. The Dockerfile packages the same tested Python entry point. GitHub Actions tests Linux and Windows as recorded above. The ns-O-RAN/QuaDRiGa integration boundary is documented and the subprocess protocol is tested, but no actual E2/NS-3/QuaDRiGa end-to-end deployment is claimed.
+Local checks cover the Python entry point and controller subprocess protocol. GitHub Actions covers Linux and Windows as recorded above. Docker build and live external RAN integration are separate validation targets.

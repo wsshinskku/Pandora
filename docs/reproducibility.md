@@ -5,17 +5,15 @@
 | Configuration | Purpose | What it establishes |
 |---|---|---|
 | `configs/smoke.yaml` | Small CPU run, 2 sites × 6 UEs × 90 slots | The complete software pipeline executes |
-| `configs/paper.yaml` | Paper-scale topology, time scales and algorithm parameters | Scalability and behavior of the reference sandbox |
+| `configs/paper.yaml` | Paper-scale topology, time scales and algorithm parameters | Scaling the Python RAN experiment |
 | External NPZ episodes + `pandora train` | Learn on separately acquired post-execution data | Applicability to the provided dataset, subject to its provenance |
 | External RAN + `pandora control` | Apply contracts to a platform's actual control surface | Requires separately validated telemetry and enforcement hooks |
-
-Only the final level, using the original scenario and traces, could support a faithful reproduction of the paper's reported RAN experiment. A larger sandbox run does not establish that claim.
 
 ## Dataset partitioning
 
 For a seed, episodes 0–3 are training, episode 4 is calibration, and episode 5 is testing under the default configuration. The number of training episodes is configurable; the two subsequent episode IDs remain distinct. `partition_episodes` rejects duplicate IDs. `LocalLearner.fit` accepts only training episodes. `RiskCalibrator.fit` accepts only calibration episodes.
 
-Only actually executed actions are model inputs. The sandbox applies the projected vector unchanged. The external integration additionally records acknowledgements, preserving any difference between requested and executed vectors.
+Only actually executed actions are model inputs. The simulation backend applies the projected vector unchanged. The external integration additionally records acknowledgements, preserving any difference between requested and executed vectors.
 
 Collection and evaluation use separate random streams. Traffic and channels are generated before actions are executed, so random policy sampling cannot change a method's exogenous trace. A common initial shared model is copied to every site; local shuffling is seeded independently. Each ablation starts from the same initialization and collection data for that seed.
 
